@@ -172,7 +172,7 @@
 	// if you experience weird errors and tt-rss failing to start, blank pages
 	// after login, or content encoding errors, disable it.
 
-	putenv('TTRSS_PLUGINS=auth_internal, note');
+	putenv('TTRSS_PLUGINS=auth_ldap, auth_internal, note');
 	// Comma-separated list of plugins to load automatically for all users.
 	// System plugins have to be specified here. Please enable at least one
 	// authentication plugin here (auth_*).
@@ -181,6 +181,23 @@
 	// Disabling auth_internal in this list would automatically disable
 	// reset password link on the login form.
 	
+	// Required parameters:
+	define('LDAP_AUTH_SERVER_URI', 'ldap://localhost:389/');
+	define('LDAP_AUTH_USETLS', FALSE); // Enable StartTLS Support for ldap://
+	define('LDAP_AUTH_ALLOW_UNTRUSTED_CERT', TRUE); // Allows untrusted certificate
+	define('LDAP_AUTH_BASEDN', 'ou=users,dc=yunohost,dc=org');
+	define('LDAP_AUTH_ANONYMOUSBEFOREBIND', FALSE);
+	define('LDAP_AUTH_SEARCHFILTER', '(&(|(objectclass=posixAccount))(uid={{username}})(permission=cn=__APP__.main,ou=permission,dc=yunohost,dc=org))');
+
+	// Optional configuration
+	define('LDAP_AUTH_BINDDN', 'cn=__APP__.main,dc=yunohost,dc=org');
+	define('LDAP_AUTH_BINDPW', 'ServiceAccountsPassword');
+	define('LDAP_AUTH_LOGIN_ATTRIB', 'uid');
+	define('LDAP_AUTH_LOG_ATTEMPTS', FALSE);
+
+	// Enable Debug Logging
+	define('LDAP_AUTH_DEBUG', FALSE);
+
 	putenv('TTRSS_LOG_DESTINATION=sql');
 	// Log destination to use. Possible values: sql (uses internal logging
 	// you can read in Preferences -> System), syslog - logs to system log.
