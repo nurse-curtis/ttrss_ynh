@@ -113,6 +113,8 @@ then
 	echo "$(ynh_app_upstream_version)" > "$final_path/version_static.txt"
 fi
 
+cp -a ../sources/* $final_path/plugins/
+
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
