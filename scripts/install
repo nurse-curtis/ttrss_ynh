@@ -55,7 +55,7 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 #=================================================
 ynh_script_progression --message="Installing dependencies..." --weight=1
 
-ynh_install_app_dependencies $pkg_dependencies
+ynh_exec_warn_less ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -68,12 +68,13 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 #=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
-ynh_script_progression --message="Creating a MySQL database..." --weight=2
+ynh_script_progression --message="Creating a PostgreSQL database..." --weight=2
 
 db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
 ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
+ynh_psql_test_if_first_run
+ynh_psql_setup_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -135,8 +136,8 @@ ynh_add_systemd_config
 #=================================================
 ynh_script_progression --message="Initializing database..." --weight=6
 
-ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" \
-    < "$final_path/schema/ttrss_schema_mysql.sql"
+ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name" \
+    < "$final_path/schema/ttrss_schema_pgsql.sql"
 
 ynh_exec_as $app php${phpversion} ${final_path}/update.php --update-schema=force-yes
 
@@ -152,7 +153,7 @@ yunohost service add $app --description="News feed reader and aggregator" --log=
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=1
+ynh_script_progression --message="Starting a systemd service..." --weight=1 --log_path="systemd"
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
