@@ -187,11 +187,11 @@
 	define('LDAP_AUTH_ALLOW_UNTRUSTED_CERT', TRUE); // Allows untrusted certificate
 	define('LDAP_AUTH_BASEDN', 'ou=users,dc=yunohost,dc=org');
 	define('LDAP_AUTH_ANONYMOUSBEFOREBIND', FALSE);
-	define('LDAP_AUTH_SEARCHFILTER', '(&(|(objectclass=posixAccount))(uid={{username}})(permission=cn=__APP__.main,ou=permission,dc=yunohost,dc=org))');
+	define('LDAP_AUTH_SEARCHFILTER', '(&(|(objectclass=posixAccount))(uid=???)(permission=cn=__APP__.main,ou=permission,dc=yunohost,dc=org))');
 
 	// Optional configuration
-	define('LDAP_AUTH_BINDDN', 'cn=__APP__.main,dc=yunohost,dc=org');
-	define('LDAP_AUTH_BINDPW', 'ServiceAccountsPassword');
+	// define('LDAP_AUTH_BINDDN', 'cn=__APP__.main,dc=yunohost,dc=org');
+	// define('LDAP_AUTH_BINDPW', 'ServiceAccountsPassword');
 	define('LDAP_AUTH_LOGIN_ATTRIB', 'uid');
 	define('LDAP_AUTH_LOG_ATTEMPTS', FALSE);
 
