@@ -141,7 +141,7 @@ ynh_psql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name"
 
 ynh_exec_as $app php${phpversion} ${final_path}/update.php --update-schema=force-yes
 
-yng_script_progression --message"Installing pg_trgm extension" --weight=1
+ynh_script_progression --message"Installing pg_trgm extension" --weight=1
 ynh_psql_execute_as_root --sql="CREATE EXTENSION pg_trgm;" --database="$db_name"
 
 #=================================================
